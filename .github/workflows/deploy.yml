@@ -25,6 +25,19 @@ jobs:
           echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY_BASE64 }}" | base64 --decode > /tmp/gcp-sa.json
           echo "GOOGLE_APPLICATION_CREDENTIALS=/tmp/gcp-sa.json" >> $GITHUB_ENV
 
+      - name: Prime Firebase API enablement cache
+        run: |
+          mkdir -p "$HOME/.config/configstore"
+          cat > "$HOME/.config/configstore/firebase-tools.json" <<EOF
+          {
+            "apiEnablementCache": {
+              "${{ secrets.FIREBASE_PROJECT_ID }}": {
+                "firestore.googleapis.com": true
+              }
+            }
+          }
+          EOF
+
       - name: Deploy Firestore rules
         run: |
           npx firebase-tools deploy \
