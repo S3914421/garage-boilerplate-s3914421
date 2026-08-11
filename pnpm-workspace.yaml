@@ -14,6 +14,12 @@ overrides:
   postcss: '^8.5.18'
   # next also bundles an old sharp (image optimization) — force the patched line.
   sharp: '^0.35.0'
+  # eslint pulls js-yaml <4.3.1 via @eslint/eslintrc — CVE-2026-59870 (quadratic
+  # CPU consumption in !!omap resolution). Dev-only, but `pnpm audit` fails CI.
+  js-yaml: '^4.3.1'
+  # next pulls nanoid <3.3.17 via postcss — custom generators loop forever when
+  # size is zero (GHSA-2v37-7h3g-55p8). Build-time only, same CI reason.
+  nanoid: '^3.3.17'
 
 allowBuilds:
   '@firebase/util': true
