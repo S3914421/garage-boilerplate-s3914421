@@ -105,7 +105,7 @@ Test user:        smoke-test@example.com / test1234 (delete from Firebase consol
 | App pages (/, /auth/signin, /dashboard gate) | ✅ |
 | Auth round trip (signup → session → dashboard) | ✅ |
 
-Next: sign up in the browser, then read docs/GUIDE.md §4 to build your first feature.
+Next: sign up in the browser, then read docs/COPY-PASTE-FEATURE.md to build your first feature.
 ```
 
 If ANY check failed, the verdict is **NOT BOOTSTRAPPED** — show which step, the error, and the fix from the tables above. Never report success with a failing smoke test.

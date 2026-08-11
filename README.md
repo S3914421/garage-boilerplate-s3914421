@@ -80,7 +80,7 @@ Restart the dev server after changing `.env` — `NEXT_PUBLIC_*` variables are b
 | "Missing or insufficient permissions" | Firestore security rules don't allow that access — add rules in `firebase/firestore.rules`, then deploy them (`npx firebase-tools deploy --only firestore:rules`). |
 | Commit rejected | Message must be Conventional Commits (`feat: …`, `fix: …`). |
 
-More beginner-oriented pitfalls: [docs/GUIDE.md § Common pitfalls](docs/GUIDE.md#6-common-pitfalls).
+More beginner-oriented pitfalls: [docs/GUIDE.md § Common pitfalls](docs/GUIDE.md#5-common-pitfalls).
 
 ## Project Structure
 
@@ -158,6 +158,7 @@ See [CLAUDE.md](CLAUDE.md) for the full harness reference.
 | Verified walkthrough (all steps + code) | [docs/TUTORIAL-WALKTHROUGH.md](docs/TUTORIAL-WALKTHROUGH.md) |
 | Copy-paste setup (no AI, exact steps) | [docs/COPY-PASTE-SETUP.md](docs/COPY-PASTE-SETUP.md) |
 | Copy-paste feature build (no AI, exact file paths) | [docs/COPY-PASTE-FEATURE.md](docs/COPY-PASTE-FEATURE.md) |
+| Deploy to Vercel, step by step | [docs/DEPLOY-TO-VERCEL.md](docs/DEPLOY-TO-VERCEL.md) |
 | Slide deck — system overview + AI tooling | [docs/garage-boilerplate-guide.pptx](docs/garage-boilerplate-guide.pptx) |
 | Slide deck — the notes feature, step by step | [docs/notes-feature-tutorial.pptx](docs/notes-feature-tutorial.pptx) |
 | Architecture + diagrams | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) |
