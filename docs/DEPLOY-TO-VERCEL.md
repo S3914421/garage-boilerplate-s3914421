@@ -149,7 +149,40 @@ side — treat merging to `main` as shipping. Pull requests get their own previe
 | Build fails: "No Next.js version detected" | **Root Directory** isn't set to `frontend`. Settings → General → Root Directory. |
 | "Missing or insufficient permissions" from Firestore | Your rules aren't deployed, or they don't allow the read/write. See Step 8. |
 | Pages load but server-side data is empty | `FIREBASE_SERVICE_ACCOUNT_KEY_BASE64` is missing or malformed in Vercel. Re-copy it as one unbroken line, then redeploy. |
+| Sign-in shows a success toast but stays on the sign-in page | `/api/auth/session` returned 401, so no `__session` cookie was set and the proxy bounced the redirect. The toast fires before the session is confirmed, so it lies. Read the deployment's Runtime Logs for the real cause — the two below are the common ones. |
+| Runtime log: `FIREBASE_SERVICE_ACCOUNT_KEY_BASE64 environment variable is not set` | The variable is absent **or empty**. A variable created with a blank value still appears in the Vercel list, so seeing the name there is not proof it has a value. Delete it and re-create it rather than guessing. |
+| Runtime log: `invalid_grant: Invalid JWT Signature` / `app/invalid-credential` | The variable exists and is well-formed, but holds a **revoked** key — typically after rotating the service account key without updating Vercel. Paste the current key and redeploy. |
+| Changed the variable but the error is identical | Vercel bakes environment variables in at build time. Editing a variable changes nothing until a **new deployment** exists. Confirm one was actually created — if the newest deployment predates your edit, it is still serving the old value. |
 | The backend API 404s | Expected — `backend/` is not deployed to Vercel. It's an optional Firebase Cloud Function requiring the Blaze plan; see [CI-CD.md](CI-CD.md). |
+
+---
+
+## Rotating the service account key
+
+Do this in order. Reversing steps 2 and 5 takes production down.
+
+1. Google Cloud → Service Accounts → the `firebase-adminsdk-*` account → **KEYS** →
+   **ADD KEY** → Create new key → JSON. Leave the old keys alone for now.
+2. Base64-encode it and update the value in all three places: the local `.env`
+   (then `pnpm run env:sync`), the Vercel environment variable, and the GitHub
+   Actions secret.
+3. **Redeploy.** Until a new deployment exists, production is still running the
+   old key.
+4. Confirm the new deployment is `READY` and sign-in still works.
+5. Only now delete the old keys.
+6. Test sign-in once more. This is the step that actually proves anything: while
+   the old key still exists, both keys work, so a passing test tells you nothing
+   about which one production is using. If sign-in survives step 5, the new key
+   is genuinely live.
+
+To encode without the key ever passing through a terminal or a chat window:
+
+```powershell
+[Convert]::ToBase64String([IO.File]::ReadAllBytes("C:\path\to\key.json")) | Set-Clipboard
+```
+
+Delete the downloaded JSON afterwards — the value now lives in `.env`, which is
+gitignored.
 
 ---
 
